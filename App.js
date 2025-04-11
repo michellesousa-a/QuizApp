@@ -5,7 +5,7 @@ import { StyleSheet, Text, View, TouchableOpacity, ScrollView, SafeAreaView } fr
 
 const Stack = createStackNavigator();
 
-// Example quiz data
+
 const quizData = [
   {
     "prompt": "Which of the following is a track in the UCF digital media BA?",
@@ -40,12 +40,12 @@ const quizData = [
   }
 ];
 
-// Main App Component that manages the global state
+
 export default function App() {
   const [userAnswers, setUserAnswers] = useState(Array(quizData.length).fill(null));
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
-  // Function to handle answer submission and navigation
+ 
   const handleAnswer = (answer) => {
     const newAnswers = [...userAnswers];
     newAnswers[currentQuestionIndex] = answer;
@@ -54,10 +54,10 @@ export default function App() {
     if (currentQuestionIndex < quizData.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
-      // Navigate to summary on last question
-      return true; // Return true to indicate we should go to summary
+    
+      return true; 
     }
-    return false; // We're not going to summary yet
+    return false; 
   };
 
   return (
@@ -68,7 +68,7 @@ export default function App() {
           options={{ 
             title: "Quiz", 
             headerLeft: () => null,
-            gestureEnabled: false, // Prevent swipe back
+            gestureEnabled: false,]
           }}
         >
           {props => (
@@ -86,7 +86,7 @@ export default function App() {
           options={{
             title: "Quiz Results",
             headerLeft: () => null,
-            gestureEnabled: false, // Prevent swipe back
+            gestureEnabled: false, 
           }}
         >
           {props => (
@@ -102,27 +102,19 @@ export default function App() {
   );
 }
 
-// Question Component
 export function QuestionScreen({ questionData, questionIndex, totalQuestions, onAnswer, navigation }) {
-  // For multiple-choice and true-false
+  
   const [selectedIndex, setSelectedIndex] = useState(null);
   
-  // For multiple-answer
   const [selectedIndices, setSelectedIndices] = useState([]);
   
   const handleNextQuestion = () => {
-    // Get appropriate answer based on question type
     const answer = questionData.type === "multiple-answer" ? selectedIndices : selectedIndex;
-    
-    // Use the onAnswer callback to update parent state
     const goToSummary = onAnswer(answer);
-    
-    // Navigate to summary if it's the last question
     if (goToSummary) {
       navigation.navigate('Summary');
     }
   };
-  
   const toggleMultipleAnswerChoice = (idx) => {
     setSelectedIndices((prevSelected) => {
       if (prevSelected.includes(idx)) {
@@ -132,8 +124,6 @@ export function QuestionScreen({ questionData, questionIndex, totalQuestions, on
       }
     });
   };
-
-  // Render choices using the same button style for all question types
   const renderChoices = () => {
     if (questionData.type === "multiple-answer") {
       return (
@@ -202,7 +192,7 @@ export function QuestionScreen({ questionData, questionIndex, totalQuestions, on
   );
 }
 
-// Summary Component
+
 export function Summary({ quizData, userAnswers }) {
   const calculateScore = () => {
     let score = 0;
@@ -212,7 +202,7 @@ export function Summary({ quizData, userAnswers }) {
       const userAnswer = userAnswers[i];
       
       if (question.type === "multiple-answer") {
-        // For multiple-answer, check if arrays are equal
+       
         const correct = question.correct;
         if (
           userAnswer && 
@@ -223,7 +213,7 @@ export function Summary({ quizData, userAnswers }) {
           score++;
         }
       } else {
-        // For multiple-choice and true-false
+        
         if (userAnswer === question.correct) {
           score++;
         }
@@ -240,7 +230,7 @@ export function Summary({ quizData, userAnswers }) {
     let textStyle = styles.normalText;
     
     if (question.type === "multiple-answer") {
-      // For multiple-answer
+     
       const isSelected = userAnswer && userAnswer.includes(index);
       const isCorrectAnswer = question.correct.includes(index);
       
@@ -250,7 +240,7 @@ export function Summary({ quizData, userAnswers }) {
         textStyle = styles.incorrectAnswer;
       }
     } else {
-      // For multiple-choice and true-false questions
+     
       const isCorrectAnswer = index === question.correct;
       const isUserAnswer = index === userAnswer;
       
@@ -302,8 +292,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     padding: 15,
   },
-  
-  // Common text styles
+
   title: {
     fontSize: 22,
     fontWeight: 'bold',
@@ -328,7 +317,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   
-  // Choice elements
   choicesContainer: {
     marginBottom: 15,
     width: '100%',
@@ -356,7 +344,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ccc',
   },
   
-  // Summary styles
   score: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -393,14 +380,3 @@ const styles = StyleSheet.create({
   },
 });
 
-/* 
-Correct answers to the sample questions:
-1. Which of the following is a track in the UCF digital media BA?
-   Correct: "Both web design and game design" (index 2)
-
-2. Which of the following are UCF's school colors? (Select all that apply)
-   Correct: "Black" and "Gold" (indices 1 and 3)
-
-3. True or False: The sky is blue
-   Correct: "True" (index 0)
-*/
